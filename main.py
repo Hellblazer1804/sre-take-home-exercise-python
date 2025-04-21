@@ -42,13 +42,13 @@ def load_config(file_path):
                 raise ValueError("YAML file must contain a list of endpoints.")
             for endpoint in data:
                 validate_endpoint(endpoint)
-            print("Parsed and validated YAML data:", data)
+            logging.info(   "Parsed and validated YAML data:", data)
             return data
     except yaml.YAMLError as e:
-        print(f"Error parsing YAML file: {e}")
+        logging.info(f"Error parsing YAML file: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"Error loading configuration: {e}")
+        logging.info(f"Error loading configuration: {e}")
         sys.exit(1)
 
 
@@ -67,17 +67,17 @@ async def check_health(endpoint):
                     async with session.request(method, url, headers=headers, json=body, timeout=30) as response:
                         end_time = asyncio.get_event_loop().time()
                         if 200 <= response.status < 300 and end_time - start_time <= 0.5:
-                            print(f"Response from {url}: {response.status}")
+                            logging.info(f"Response from {url}: {response.status}")
                             return "UP"
                         else:
-                            print(f"Response from {url}: {response.status}")
+                            logging.info(f"Response from {url}: {response.status}")
                             return "DOWN"
                 except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-                    print(f"Attempt {attempt + 1} failed for {url}: {e}")
+                    logging.info(f"Attempt {attempt + 1} failed for {url}: {e}")
                     if attempt == 1:  # If it's the last attempt, mark as DOWN
                         return "DOWN"
     except Exception as e:
-        print(f"Unexpected error for {url}: {e}")
+        logging.info(f"Unexpected error for {url}: {e}")
         return "DOWN"
 
 

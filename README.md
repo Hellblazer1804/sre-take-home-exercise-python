@@ -4,11 +4,16 @@ This project is a Python-based tool to monitor the health of endpoints defined i
 
 ## Installation
 
-1. Clone the repository or unzip the file contents:
+1. Clone the repository:
    ```bash
    git clone <repository-url>
    cd <repository-directory>
    ```
+  or download the ZIP file and extract it:
+    ```bash
+    unzip <repository-zip-file>
+    cd <repository-directory>
+    ```
 
 2. Create a virtual environment and activate it:
    ```bash
@@ -61,12 +66,27 @@ This project is a Python-based tool to monitor the health of endpoints defined i
 **Reason for Change:** This improves performance and ensures that the monitoring interval remains consistent, even with a large number of endpoints or slow responses.
 
 ### 3. Logging Improvements
-**Issue Identified:** The logging was basic and did not provide sufficient context for each endpoint's status.
-**Change Made:** The logging format was improved to include the endpoint name, URL, and status code. Additionally, a separate log file is created for each run, and the logs are rotated daily.
+**Issue Identified:** : The logging was basic and did not provide sufficient context for each endpoint's status.
+
+**Change Made:** : The logging format was improved to include the endpoint name, URL, and status code. Additionally, a separate log file is created for each run, and the logs are rotated daily.
+
 **Reason for Change:** This provides better visibility into the health of each endpoint and makes it easier to troubleshoot issues.
 
 ### 4. Error Handling and Retries
 **Issue Identified:** The original implementation did not handle errors gracefully, which could lead to crashes or unhandled exceptions.
+
 **Change Made:** Added error handling for network errors, timeouts, and invalid responses. The script now retries failed requests a specified number of times before marking an endpoint as down.
+
 **Reason for Change:** This improves the robustness of the script and ensures that temporary network issues do not cause false positives in endpoint availability.
+
+### 5. Added missing checks
+**Issue Identified:** The original implementation did not check for the following:
+1. If the endpoint extraction was extracting URL correctly including ignoring the trailing slashes and port numbers.
+2. If the method was being set correctly in the request(set default to GET).
+3. The original implementation did not check if the response time was less than 500 ms.
+
+**Change Made:** Added checks to ensure that the URL is extracted correctly, the method is set correctly in the request, and the response time is less than 500 ms.
+
+**Reason for Change:** This ensures that the script only processes valid configurations, improving reliability and user experience.
+
 
